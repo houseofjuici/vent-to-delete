@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vent to Delete - Ephemeral Encrypted Chat</title>
+  <meta name="description" content="Ephemeral encrypted chat threads that auto-delete after both parties read. No logs. No screenshots.">
+  
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/mobile.css">
+</head>
+<body>
+  <div class="container" role="application" aria-label="Vent to Delete Chat Application">
+    <!-- Header -->
+    <header class="header">
+      <h1>🔒 Vent to Delete</h1>
+      <p>Ephemeral. Encrypted. Gone forever.</p>
+      <div class="header-actions">
+        <button class="btn-icon" onclick="UI.openSettings()" aria-label="Open Settings" title="Settings (⌘+,)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3m15.364 6.364l-4.243-4.243M9.879 9.879L5.636 5.636m12.728 12.728l-4.243-4.243m-4.242 0L5.636 18.364"></path>
+          </svg>
+        </button>
+        <button class="btn-icon" onclick="UI.openShortcutsModal()" aria-label="Show Keyboard Shortcuts" title="Keyboard Shortcuts (⌘+/)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+    
+    <!-- Connection Status -->
+    <div id="connection-status" class="connection-status connected" role="status" aria-live="polite">
+      <div class="status-dot"></div>
+      <span>Connected</span>
+    </div>
+    
+    <!-- Main Content -->
+    <main id="main-content" class="content">
+      <!-- Home View -->
+      <div id="home-view" role="region" aria-label="Home">
+        <button class="btn btn-primary" onclick="UI.showCreateThread()" aria-describedby="create-thread-desc">
+          ✨ Create New Thread
+        </button>
+        <p id="create-thread-desc" class="description">Start a new ephemeral encrypted conversation</p>
+        
+        <div class="input-group" style="margin-top: 24px;">
+          <label for="join-thread-id">Or join with thread ID:</label>
+          <div style="display: flex; gap: 10px;">
+            <input type="text" id="join-thread-id" placeholder="Enter thread ID..." aria-label="Thread ID to join" />
+            <button class="btn btn-primary" style="width: auto; margin: 0;" onclick="Chat.joinThread()" aria-label="Join thread">
+              Join
+            </button>
+          </div>
+        </div>
+
+        <div class="security-info" role="complementary" aria-label="Security Features">
+          <strong>🔐 Security Features:</strong>
+          • End-to-end encryption (AES-256)<br>
+          • No accounts, no tracking<br>
+          • Auto-delete after timer expires<br>
+          • Auto-delete when both read all messages<br>
+          • No message logs after deletion
+        </div>
+
+        <p class="disclaimer">
+          Messages are encrypted on your device. The encryption key is stored in your URL and never sent to the server. Keep your invite link private.
+        </p>
+      </div>
+
+      <!-- Create Thread View -->
+      <div id="create-view" class="hidden" role="region" aria-label="Create Thread">
+        <h2 style="margin-bottom: 20px;">Create Thread</h2>
+        
+        <div class="input-group">
+          <label for="thread-timer">Thread Timer:</label>
+          <select id="thread-timer" aria-label="Select thread expiration time">
+            <option value="1">1 hour</option>
+            <option value="6">6 hours</option>
+            <option value="12">12 hours</option>
+            <option value="24" selected>24 hours</option>
+            <option value="48">48 hours</option>
+            <option value="72">3 days</option>
+            <option value="168">1 week</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" onclick="Chat.createThread()" aria-label="Create new thread with selected timer">
+          🚀 Create Thread
+        </button>
+        <button class="btn btn-secondary" onclick="UI.showHome()" aria-label="Go back to home">
+          ← Back
+        </button>
+      </div>
+
+      <!-- Thread Created View -->
+      <div id="created-view" class="hidden" role="region" aria-label="Thread Created">
+        <h2 style="margin-bottom: 20px;">✅ Thread Created!</h2>
+        
+        <div class="alert alert-success" role="alert">
+          Share this link with the person you want to chat with. The thread will auto-delete in <span id="timer-display"></span>.
+        </div>
+
+        <label for="invite-link" style="font-weight: 600; display: block; margin-bottom: 8px;">Invite Link (click to copy):</label>
+        <div class="copy-link" id="invite-link" onclick="copyInviteLink()" tabindex="0" role="button" aria-label="Copy invite link to clipboard">
+          Loading...
+        </div>
+
+        <p class="disclaimer">
+          ⚠️ Keep this link private. It contains your encryption key. Anyone with the link can join your thread.
+        </p>
+
+        <button class="btn btn-primary" onclick="openThread()" aria-label="Open the newly created thread">
+          Open Thread
+        </button>
+        <button class="btn btn-secondary" onclick="UI.showHome()" aria-label="Go back to home">
+          ← Home
+        </button>
+      </div>
+
+      <!-- Chat View -->
+      <div id="chat-view" class="hidden" role="region" aria-label="Chat Interface">
+        <div class="search-container">
+          <div class="search-input-wrapper">
+            <input type="text" id="search-input" placeholder="🔍 Search messages..." aria-label="Search messages in thread" />
+            <span class="search-icon" aria-hidden="true">🔍</span>
+          </div>
+        </div>
+        
+        <div class="status-bar" id="thread-status" role="status" aria-live="polite">
+          Loading...
+        </div>
+
+        <div class="chat-container" id="chat-container" role="log" aria-live="polite" aria-atomic="false" tabindex="0">
+          <div id="pull-to-refresh" class="pull-to-refresh" aria-hidden="true">
+            <span>Pull to refresh</span>
+          </div>
+          <div class="empty-state">
+            <div class="empty-state-icon">💬</div>
+            <h3>No messages yet</h3>
+            <p>Start the conversation by sending a message below.</p>
+          </div>
+        </div>
+
+        <div class="message-input-container">
+          <div class="message-input-wrapper">
+            <textarea 
+              id="message-input" 
+              placeholder="Type a message... (Press Enter to send, Shift+Enter for new line)" 
+              aria-label="Message input"
+              rows="1"
+            ></textarea>
+          </div>
+          <button class="send-button" onclick="Chat.sendMessage()" aria-label="Send message">
+            <span>Send</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+
+        <button class="btn btn-secondary" style="margin-top: 10px;" onclick="UI.showHome()" aria-label="Leave thread and return home">
+          ← Leave Thread
+        </button>
+      </div>
+
+      <!-- Thread Deleted View -->
+      <div id="deleted-view" class="hidden" role="region" aria-label="Thread Deleted">
+        <h2 style="margin-bottom: 20px;">👋 Thread Deleted</h2>
+        
+        <div class="alert alert-success" role="alert">
+          This thread has been permanently deleted. All messages are gone.
+        </div>
+
+        <p style="text-align: center; color: #A89A88; margin: 20px 0;">
+          No messages were logged. No trace remains.
+        </p>
+
+        <button class="btn btn-primary" onclick="UI.showHome()" aria-label="Create a new thread">
+          Create New Thread
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+  <!-- Error Tracking -->
+  <script>
+    window.SENTRY_DSN = '<%= SENTRY_DSN %>';
+  </script>
+  <script src="/lib/sentry.js"></script>
+
+  <!-- Analytics -->
+  <script>
+    window.POSTHOG_KEY = '<%= POSTHOG_KEY %>';
+    window.POSTHOG_HOST = '<%= POSTHOG_HOST %>';
+  </script>
+  <script src="/lib/analytics.js"></script>
+
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>

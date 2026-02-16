@@ -1,0 +1,407 @@
+/**
+ * Mobile Optimizations
+ * Enhanced responsive design and touch interactions
+ */
+
+/* ============================================
+   TOUCH TARGETS
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* Larger touch targets */
+  .btn,
+  .btn-primary,
+  .btn-secondary {
+    min-height: 48px;
+    padding: var(--space-14) var(--space-20);
+    font-size: 16px; /* Prevent iOS zoom */
+  }
+  
+  .btn-icon {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .reaction {
+    min-width: 40px;
+    min-height: 40px;
+    padding: var(--space-8) var(--space-12);
+    font-size: 16px;
+  }
+  
+  .input-group input,
+  .input-group select,
+  .input-group textarea,
+  .message-input-container textarea {
+    font-size: 16px; /* Prevent iOS zoom on focus */
+    min-height: 48px;
+    padding: var(--space-12) var(--space-16);
+  }
+  
+  /* Larger buttons in modals */
+  .modal .btn {
+    width: 100%;
+    margin-bottom: var(--space-8);
+  }
+  
+  .timer-preset-btn {
+    min-height: 56px;
+    font-size: 14px;
+  }
+  
+  /* Larger keyboard shortcuts in help modal */
+  kbd {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+}
+
+/* ============================================
+   MOBILE LAYOUT
+   ============================================ */
+
+@media (max-width: 640px) {
+  body {
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 100%;
+    max-height: 100vh;
+    height: 100vh;
+    border-radius: 0;
+  }
+  
+  .header {
+    padding: var(--space-16) var(--space-20);
+  }
+  
+  .header h1 {
+    font-size: 22px;
+  }
+  
+  .header-actions {
+    position: fixed;
+    top: var(--space-16);
+    right: var(--space-16);
+    z-index: 10;
+  }
+  
+  .content {
+    padding: var(--space-16);
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+  
+  .chat-container {
+    height: calc(100vh - 300px);
+    min-height: 300px;
+  }
+  
+  .message {
+    max-width: 90%;
+    padding: var(--space-12) var(--space-14);
+  }
+  
+  .message-input-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-bg-secondary);
+    padding: var(--space-12);
+    border-top: 1px solid var(--color-border);
+    z-index: 100;
+  }
+  
+  .status-bar {
+    font-size: 12px;
+    padding: var(--space-8);
+  }
+  
+  /* Hide footer in modals on mobile */
+  .modal-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-bg-secondary);
+    padding: var(--space-12);
+    border-top: 1px solid var(--color-border);
+    z-index: 1001;
+  }
+  
+  .modal-body {
+    padding-bottom: 80px;
+  }
+}
+
+/* ============================================
+   LANDSCAPE MODE
+   ============================================ */
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .header {
+    padding: var(--space-8) var(--space-16);
+  }
+  
+  .header h1 {
+    font-size: 18px;
+  }
+  
+  .content {
+    padding: var(--space-12);
+  }
+  
+  .chat-container {
+    height: calc(100vh - 180px);
+  }
+  
+  .message {
+    padding: var(--space-8) var(--space-12);
+    margin-bottom: var(--space-8);
+  }
+  
+  .message-input-container {
+    padding: var(--space-8);
+  }
+  
+  .message-input-container textarea {
+    min-height: 40px;
+    max-height: 80px;
+  }
+  
+  .send-button {
+    min-height: 40px;
+    padding: var(--space-8) var(--space-16);
+  }
+}
+
+/* ============================================
+   TOUCH FEEDBACK
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Add ripple effect for touch */
+  .btn:active,
+  .btn-primary:active,
+  .btn-secondary:active,
+  .reaction:active,
+  .timer-preset-btn:active {
+    transform: scale(0.97);
+    opacity: 0.8;
+  }
+  
+  /* Disable hover effects */
+  .btn:hover,
+  .reaction:hover,
+  .timer-preset-btn:hover {
+    transform: none;
+  }
+  
+  /* Larger hit areas */
+  .message-reactions {
+    gap: var(--space-6);
+  }
+  
+  .reaction {
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+  }
+}
+
+/* ============================================
+   SAFE AREA (iPhone X+)
+   ============================================ */
+
+@supports (padding: max(0px)) {
+  .container {
+    padding-left: max(var(--space-16), env(safe-area-inset-left));
+    padding-right: max(var(--space-16), env(safe-area-inset-right));
+    padding-top: max(var(--space-16), env(safe-area-inset-top));
+    padding-bottom: max(var(--space-16), env(safe-area-inset-bottom));
+  }
+  
+  .message-input-container {
+    padding-bottom: max(var(--space-12), env(safe-area-inset-bottom));
+  }
+  
+  .modal-footer {
+    padding-bottom: max(var(--space-12), env(safe-area-inset-bottom));
+  }
+}
+
+/* ============================================
+   ORIENTATION CHANGES
+   ============================================ */
+
+/* Hide address bar in mobile browsers */
+@media (max-width: 768px) {
+  body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+  
+  html {
+    height: -webkit-fill-available;
+  }
+}
+
+/* ============================================
+   DARK MODE (Auto)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] {
+    --color-bg-primary: #2A241E;
+    --color-bg-secondary: #3D362F;
+    --color-bg-tertiary: #4D453D;
+    --color-text-primary: #F5F0E6;
+    --color-text-secondary: #D4C4B0;
+    --color-text-tertiary: #A89A88;
+  }
+}
+
+/* ============================================
+   LIGHT MODE (Auto)
+   ============================================ */
+
+@media (prefers-color-scheme: light) {
+  [data-theme="auto"] {
+    --color-bg-primary: #F5F0E6;
+    --color-bg-secondary: #E8E0D8;
+    --color-bg-tertiary: #D4C4B0;
+    --color-text-primary: #2A241E;
+    --color-text-secondary: #3D362F;
+    --color-text-tertiary: #5D5348;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .message {
+    animation: none;
+  }
+  
+  .typing-dots span {
+    animation: none;
+  }
+  
+  .status-dot {
+    animation: none;
+  }
+}
+
+/* ============================================
+   HIGH CONTRAST MODE
+   ============================================ */
+
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: #8B7355;
+  }
+  
+  .btn,
+  .input-group input,
+  .input-group select,
+  .input-group textarea {
+    border-width: 3px;
+  }
+  
+  .message {
+    border: 1px solid var(--color-border);
+  }
+  
+  [data-high-contrast="true"] {
+    --color-text-primary: #FFFFFF;
+    --color-text-secondary: #E8E0D8;
+    --color-border: #FFFFFF;
+  }
+}
+
+/* ============================================
+   FOCUS STYLES FOR ACCESSIBILITY
+   ============================================ */
+
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+  padding: var(--space-12) var(--space-20);
+  text-decoration: none;
+  border-radius: 0 0 var(--radius-md) 0;
+  z-index: 1002;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ============================================
+   SCROLLBAR (Mobile Hide)
+   ============================================ */
+
+@media (max-width: 768px) {
+  .chat-container::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+  
+  .chat-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .settings-panel-container::-webkit-scrollbar,
+  .command-list::-webkit-scrollbar {
+    width: 4px;
+  }
+}
+
+/* ============================================
+   KEYBOARD AVOIDANCE (Virtual Keyboard)
+   ============================================ */
+
+@media (max-width: 768px) {
+  .message-input-container {
+    transition: transform 0.3s ease;
+  }
+  
+  /* When keyboard is visible, adjust layout */
+  .message-input-container.keyboard-visible {
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   PRINT PREVENTION
+   ============================================ */
+
+@media print {
+  body {
+    display: none !important;
+  }
+  
+  * {
+    display: none !important;
+  }
+}

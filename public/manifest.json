@@ -1,0 +1,39 @@
+{
+  "name": "Vent to Delete — Cathartic Writing Tool",
+  "short_name": "Vent to Delete",
+  "description": "Write it out, feel better, delete forever. Private, cathartic journaling for when you just need to vent.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#ff4757",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["lifestyle", "productivity"],
+  "shortcuts": [
+    {
+      "name": "New Vent",
+      "short_name": "Vent",
+      "description": "Start a new venting session",
+      "url": "./",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
