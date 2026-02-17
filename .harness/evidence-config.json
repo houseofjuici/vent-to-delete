@@ -1,0 +1,50 @@
+{
+  "app": "vent-to-delete",
+  "version": "1.0.0",
+  "evidenceRequirements": {
+    "visual": {
+      "enabled": true,
+      "threshold": 0.05,
+      "viewports": [
+        {"name": "mobile", "width": 375, "height": 667},
+        {"name": "tablet", "width": 768, "height": 1024},
+        {"name": "desktop", "width": 1920, "height": 1080}
+      ],
+      "scenarios": [
+        "journal-page",
+        "write-entry",
+        "mood-tracking",
+        "sentiment-analysis",
+        "secure-deletion"
+      ]
+    },
+    "functional": {
+      "enabled": true,
+      "criticalFlows": [
+        "write-journal-entry",
+        "track-mood",
+        "analyze-sentiment",
+        "view-history",
+        "secure-delete"
+      ]
+    },
+    "performance": {
+      "enabled": true,
+      "thresholds": {
+        "LCP": 2500,
+        "FID": 100,
+        "CLS": 0.1
+      }
+    },
+    "accessibility": {
+      "enabled": true,
+      "standard": "WCAG 2.1 AA",
+      "autoCheck": true
+    }
+  },
+  "captureFrequency": "onPullRequest",
+  "storage": {
+    "type": "git-lfs",
+    "path": ".harness/evidence"
+  }
+}

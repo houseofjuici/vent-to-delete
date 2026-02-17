@@ -1,0 +1,60 @@
+{
+  "version": "1",
+  "appName": "vent-to-delete",
+  "riskTierRules": {
+    "critical": [
+      "db/schema.ts",
+      "lib/auth/**",
+      "app/api/vent/**",
+      "app/api/delete/**",
+      "lib/encryption/**"
+    ],
+    "high": [
+      "components/**",
+      "lib/analytics/**",
+      "app/api/**"
+    ],
+    "low": [
+      "**"
+    ]
+  },
+  "mergePolicy": {
+    "critical": {
+      "requiredChecks": [
+        "risk-policy-gate",
+        "security-scan",
+        "e2e-tests",
+        "browser-evidence",
+        "manual-review"
+      ]
+    },
+    "high": {
+      "requiredChecks": [
+        "risk-policy-gate",
+        "e2e-tests",
+        "browser-evidence"
+      ]
+    },
+    "low": {
+      "requiredChecks": [
+        "risk-policy-gate",
+        "unit-tests"
+      ]
+    }
+  },
+  "evidenceRequirements": {
+    "uiChanges": [
+      "vent-creation",
+      "delete-confirmation",
+      "encryption-verify"
+    ],
+    "apiChanges": [
+      "integration-tests",
+      "contract-tests"
+    ],
+    "schemaChanges": [
+      "migration-tests",
+      "rollback-plan"
+    ]
+  }
+}
